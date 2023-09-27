@@ -27,8 +27,10 @@ class MyApp extends StatelessWidget {
     const genres = '[Animation, Family, Adventure, Fantasy, Comedy]';
     const overviewTitle = 'Overview';
     const overview = 'While working underground to fix a water main, Brooklyn plumbers—and brothers—Mario and Luigi are transported down a mysterious pipe and wander into a magical new world. But when the brothers are separated, Mario embarks on an epic quest to find Luigi.';
+    const like = 'Like';
 
     return MaterialApp(
+
         theme: ThemeData(
           useMaterial3: true,
           primaryColor: Colors.deepOrange.shade900,
@@ -38,8 +40,7 @@ class MyApp extends StatelessWidget {
           builder: (context) {
             return Scaffold(
                 body: SafeArea(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: ListView(
                       children: [
                         SizedBox(
                           height: backdropHeight,
@@ -94,21 +95,24 @@ class MyApp extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: UIConstants.imagePadding),
-                          child: Card(
-                            shape: CircleBorder(side: BorderSide(color: Colors.indigo.shade900, width: circleBorderWidth)),
-                            color: Colors.greenAccent.shade700,
-                            child: Padding(
-                              padding: const EdgeInsets.all(innerCirclePadding),
-                              child: Card(
-                                shape: const CircleBorder(),
-                                color: Colors.indigo.shade900,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(cardTextPadding),
-                                  child: Text(
-                                    cardText,
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      fontSize: UIConstants.titleFontSize,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Card(
+                              shape: CircleBorder(side: BorderSide(color: Colors.indigo.shade900, width: circleBorderWidth)),
+                              color: Colors.greenAccent.shade700,
+                              child: Padding(
+                                padding: const EdgeInsets.all(innerCirclePadding),
+                                child: Card(
+                                  shape: const CircleBorder(),
+                                  color: Colors.indigo.shade900,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(cardTextPadding),
+                                    child: Text(
+                                      cardText,
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                        fontSize: UIConstants.titleFontSize,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -148,18 +152,60 @@ class MyApp extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Expanded(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: UIConstants.textsShortPadding,
+                              horizontal: UIConstants.textsLargePadding,
+                          ),
+                          child: Text(
+                            overview,
+                            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment.centerRight,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: UIConstants.textsLargePadding),
-                            child: Text(
-                              overview,
-                              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-                            ),
+                            padding: EdgeInsets.all(UIConstants.imagePadding),
+                            child: LikeIcon(),
                           ),
                         ),
                       ],
                     )));
           }
         ));
+  }
+}
+
+class LikeIcon extends StatefulWidget {
+  const LikeIcon({super.key});
+
+  @override
+  State<LikeIcon> createState() => _LikeIconState();
+}
+
+class _LikeIconState extends State<LikeIcon> {
+
+  late IconData icon;
+
+  @override
+  void initState() {
+    super.initState();
+    icon = Icons.favorite_border;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          if (icon == Icons.favorite) {
+            icon = Icons.favorite_border;
+          } else {
+            icon = Icons.favorite;
+          }
+        });
+      },
+      child: Icon(icon),
+    );
   }
 }
