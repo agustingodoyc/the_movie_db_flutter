@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     const backdropHeight = 250.0;
-    const imageBackdrop = 'assets/Backdrop.jpg';
-    const imagePoster = 'assets/Poster.jpg';
+    const imageBackdrop = 'assets/images/Backdrop.jpg';
+    const imagePoster = 'assets/images/Poster.jpg';
     const title = 'The Super Mario Bros. Movie';
     const circleBorderWidth = 2.0;
     const innerCirclePadding = 0.8;
@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
     const genres = '[Animation, Family, Adventure, Fantasy, Comedy]';
     const overviewTitle = 'Overview';
     const overview = 'While working underground to fix a water main, Brooklyn plumbers—and brothers—Mario and Luigi are transported down a mysterious pipe and wander into a magical new world. But when the brothers are separated, Mario embarks on an epic quest to find Luigi.';
-    const like = 'Like';
 
     return MaterialApp(
 
@@ -195,17 +194,19 @@ class _LikeIconState extends State<LikeIcon> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          if (icon == Icons.favorite) {
-            icon = Icons.favorite_border;
-          } else {
-            icon = Icons.favorite;
-          }
-        });
-      },
-      child: Icon(icon),
+    return SizedBox(
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            if (icon == Icons.favorite) {
+              icon = Icons.favorite_border;
+            } else {
+              icon = Icons.favorite;
+            }
+          });
+        },
+        child: Icon(icon),
+      ),
     );
   }
 }
