@@ -6,12 +6,10 @@ import '../widgets/movie_overview.dart';
 import '../widgets/movie_title.dart';
 import '../widgets/vote_average.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  messagePrint() {
-    print('Function Called');
-  }
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
