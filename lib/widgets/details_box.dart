@@ -1,35 +1,40 @@
 import 'package:flutter/material.dart';
 
-import '../constants/movie_texts.dart';
-import '../constants/ui_constants.dart';
+import '../utils/ui_constants.dart';
 
-class FocusBox extends StatelessWidget {
-  const FocusBox({
+class DetailsBox extends StatelessWidget {
+  final String releaseDate;
+  final String genres;
+
+  const DetailsBox({
     super.key,
+    required this.releaseDate,
+    required this.genres,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding:
-      const EdgeInsets.symmetric(vertical: UIConstants.textsShortPadding),
+          const EdgeInsets.symmetric(vertical: UIConstants.textsShortPadding),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(color: Theme.of(context).focusColor),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-              vertical: UIConstants.textsShortPadding),
+            vertical: UIConstants.textsShortPadding,
+          ),
           child: Column(
             children: [
               Text(
-                MovieTexts.date,
+                releaseDate,
                 style:
-                TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               ),
               Text(
-                MovieTexts.genres,
+                genres,
                 style:
-                TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               ),
             ],
           ),

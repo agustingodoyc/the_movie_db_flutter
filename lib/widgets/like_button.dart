@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/ui_constants.dart';
+import '../utils/ui_constants.dart';
 
 class LikeButton extends StatefulWidget {
   const LikeButton({super.key});
@@ -11,6 +11,7 @@ class LikeButton extends StatefulWidget {
 
 class _LikeButtonState extends State<LikeButton> {
   IconData icon = Icons.favorite_border;
+  static const circleBorder = 20.0;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,15 @@ class _LikeButtonState extends State<LikeButton> {
         padding: const EdgeInsets.all(UIConstants.imagePadding),
         child: SizedBox(
           child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).unselectedWidgetColor),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(circleBorder),
+                ),
+              ),
+            ),
             onPressed: () {
               setState(
                 () {
@@ -31,7 +41,7 @@ class _LikeButtonState extends State<LikeButton> {
                 },
               );
             },
-            child: Icon(icon),
+            child: FittedBox(child: Icon(icon)),
           ),
         ),
       ),
