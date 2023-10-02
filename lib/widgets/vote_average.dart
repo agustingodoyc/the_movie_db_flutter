@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
-import '../constants/movie_texts.dart';
-import '../constants/ui_constants.dart';
+import '../utils/ui_constants.dart';
 
 class VoteAverage extends StatelessWidget {
-  const VoteAverage({super.key});
-
+  final num voteAverage;
   static const circleBorderWidth = 2.0;
   static const innerCirclePadding = 0.8;
-  static const cardTextPadding = 8.0;
+  static const circlePadding = 5.0;
+  static const textSize = 15.0;
+  static const maxVoteValue = 10.0;
+
+  const VoteAverage({
+    super.key,
+    required this.voteAverage,
+  });
+
+  double get votePercent => voteAverage / maxVoteValue;
 
   @override
   Widget build(BuildContext context) {
@@ -17,28 +24,30 @@ class VoteAverage extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: Card(
-          shape: CircleBorder(
-            side: BorderSide(
-              color: Colors.indigo.shade900,
-              width: circleBorderWidth,
-            ),
-          ),
-          color: Colors.greenAccent.shade700,
+          shape: const CircleBorder(),
+          color: Colors.indigo.shade900,
           child: Padding(
             padding: const EdgeInsets.all(innerCirclePadding),
-            child: Card(
-              shape: const CircleBorder(),
-              color: Colors.indigo.shade900,
-              child: Padding(
-                padding: const EdgeInsets.all(cardTextPadding),
-                child: Text(
-                  MovieTexts.voteAverage,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: UIConstants.titleFontSize,
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(circlePadding),
+                  child: CircularProgressIndicator(
+                    value: votePercent,
+                    backgroundColor: Colors.indigo,
+                    color: Colors.greenAccent,
+                    strokeWidth: circleBorderWidth,
                   ),
                 ),
-              ),
+                Text(
+                  voteAverage.toString(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontSize: textSize,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

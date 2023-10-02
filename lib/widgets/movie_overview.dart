@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../constants/movie_texts.dart';
-import '../constants/ui_constants.dart';
+import '../utils/constants.dart';
+import '../utils/ui_constants.dart';
 
 class MovieOverview extends StatelessWidget {
+  final String overview;
+
   const MovieOverview({
     super.key,
+    required this.overview,
   });
 
   @override
@@ -19,7 +22,7 @@ class MovieOverview extends StatelessWidget {
             horizontal: UIConstants.textsLargePadding,
           ),
           child: Text(
-            MovieTexts.overviewTitle,
+            Constants.overviewTitle,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
               fontSize: UIConstants.titleFontSize,
@@ -32,7 +35,7 @@ class MovieOverview extends StatelessWidget {
             horizontal: UIConstants.textsLargePadding,
           ),
           child: Text(
-            MovieTexts.overview,
+            overview,
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ),

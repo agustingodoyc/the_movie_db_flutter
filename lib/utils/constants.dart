@@ -1,4 +1,5 @@
-class MovieTexts {
+class Constants {
+  static const baseUrl = "https://image.tmdb.org/t/p/w500/";
   static const voteAverage = '7.8';
   static const title = 'The Super Mario Bros. Movie';
   static const date = '2023-04-05';

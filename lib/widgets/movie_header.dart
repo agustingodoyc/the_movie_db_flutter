@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import '../constants/ui_constants.dart';
+import '../utils/ui_constants.dart';
 
 class MovieHeader extends StatelessWidget {
-  const MovieHeader({super.key});
-
+  final String backdropUrl;
+  final String posterUrl;
   static const backdropHeight = 250.0;
-  static const imageBackdrop = 'assets/images/Backdrop.jpg';
-  static const imagePoster = 'assets/images/Poster.jpg';
+
+  const MovieHeader({
+    super.key,
+    required this.backdropUrl,
+    required this.posterUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +18,12 @@ class MovieHeader extends StatelessWidget {
       height: backdropHeight,
       child: Stack(
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: UIConstants.backdropLeftPadding),
-            child: Image(
+          Padding(
+            padding:
+                const EdgeInsets.only(left: UIConstants.backdropLeftPadding),
+            child: Image.network(
+              backdropUrl,
               fit: BoxFit.cover,
-              image: AssetImage(imageBackdrop),
               height: double.infinity,
             ),
           ),
@@ -36,11 +41,11 @@ class MovieHeader extends StatelessWidget {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(UIConstants.imagePadding),
-            child: Image(
+          Padding(
+            padding: const EdgeInsets.all(UIConstants.imagePadding),
+            child: Image.network(
+              posterUrl,
               fit: BoxFit.cover,
-              image: AssetImage(imagePoster),
             ),
           ),
         ],
