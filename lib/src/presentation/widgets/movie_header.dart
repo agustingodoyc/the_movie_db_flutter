@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../utils/ui_constants.dart';
+
+import '../../core/utils/constants/app_dimens.dart';
+
 
 class MovieHeader extends StatelessWidget {
   final String backdropUrl;
@@ -19,8 +21,7 @@ class MovieHeader extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.only(left: UIConstants.backdropLeftPadding),
+            padding: const EdgeInsets.only(left: AppDimens.backdropLeftPadding),
             child: Image.network(
               backdropUrl,
               fit: BoxFit.cover,
@@ -28,8 +29,7 @@ class MovieHeader extends StatelessWidget {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(left: UIConstants.backdropLeftPadding),
+            padding: const EdgeInsets.only(left: AppDimens.backdropLeftPadding),
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -42,7 +42,7 @@ class MovieHeader extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(UIConstants.imagePadding),
+            padding: const EdgeInsets.all(AppDimens.imagePadding),
             child: Image.network(
               posterUrl,
               fit: BoxFit.cover,

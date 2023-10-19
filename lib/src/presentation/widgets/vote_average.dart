@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/ui_constants.dart';
+import '../../core/utils/constants/app_dimens.dart';
+
 
 class VoteAverage extends StatelessWidget {
   final num voteAverage;
@@ -20,7 +21,7 @@ class VoteAverage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: UIConstants.imagePadding),
+      padding: const EdgeInsets.only(left: AppDimens.imagePadding),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Card(

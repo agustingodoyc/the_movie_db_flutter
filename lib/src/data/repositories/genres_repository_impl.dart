@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import '../../data_models/genre.dart';
-import '../interface/i_genres_repository.dart';
+import '../../domain/repositories/genres_repository.dart';
+import '../models/genre.dart';
 
-class GenresRepository implements IGenresRepository {
+class GenresRepositoryImpl implements GenresRepository {
   static const genres = 'assets/mock_data/genres.json';
   List<Genre> genresList = [];
 

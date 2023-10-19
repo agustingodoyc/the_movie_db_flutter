@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../utils/constants.dart';
-import '../utils/ui_constants.dart';
+import '../../core/utils/constants/app_dimens.dart';
+import '../../core/utils/constants/app_strings.dart';
+
 
 class MovieOverview extends StatelessWidget {
   final String overview;
@@ -18,21 +19,21 @@ class MovieOverview extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: UIConstants.textsShortPadding,
-            horizontal: UIConstants.textsLargePadding,
+            vertical: AppDimens.textsShortPadding,
+            horizontal: AppDimens.textsLargePadding,
           ),
           child: Text(
-            Constants.overviewTitle,
+            AppStrings.overviewTitle,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
-              fontSize: UIConstants.titleFontSize,
+              fontSize: AppDimens.titleFontSize,
             ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: UIConstants.textsShortPadding,
-            horizontal: UIConstants.textsLargePadding,
+            vertical: AppDimens.textsShortPadding,
+            horizontal: AppDimens.textsLargePadding,
           ),
           child: Text(
             overview,

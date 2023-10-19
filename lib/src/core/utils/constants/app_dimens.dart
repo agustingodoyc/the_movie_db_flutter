@@ -1,4 +1,4 @@
-class UIConstants {
+class AppDimens {
   static const backdropLeftPadding = 90.0;
   static const imagePadding = 20.0;
   static const titleFontSize = 25.0;

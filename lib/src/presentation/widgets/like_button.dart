@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/ui_constants.dart';
+import '../../core/utils/constants/app_dimens.dart';
+
 
 class LikeButton extends StatefulWidget {
   const LikeButton({super.key});
@@ -18,7 +19,7 @@ class _LikeButtonState extends State<LikeButton> {
     return Align(
       alignment: Alignment.centerRight,
       child: Padding(
-        padding: const EdgeInsets.all(UIConstants.imagePadding),
+        padding: const EdgeInsets.all(AppDimens.imagePadding),
         child: SizedBox(
           child: ElevatedButton(
             style: ButtonStyle(

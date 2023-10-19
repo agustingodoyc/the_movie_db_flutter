@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../data_models/movie.dart';
-import '../repositories/implementation/movies_repository.dart';
-import '../repositories/interface/i_movies_repository.dart';
-import '../utils/error_strings.dart';
+import '../../core/utils/constants/error_strings.dart';
+import '../../data/models/movie.dart';
+import '../../data/repositories/movies_repository_impl.dart';
+import '../../domain/repositories/movies_repository.dart';
 import '../widgets/movie_card.dart';
 
 class MovieList extends StatefulWidget {
@@ -14,21 +14,13 @@ class MovieList extends StatefulWidget {
 }
 
 class _MovieListState extends State<MovieList> {
-  final IMoviesRepository movieRepository = MoviesRepository();
+  final MoviesRepository movieRepository = MoviesRepositoryImpl();
   late final Future<List<Movie>> movies;
 
   @override
   void initState() {
-    movies = getMoviesList();
+    movies = movieRepository.fetchMovies();
     super.initState();
-  }
-
-  Future<List<Movie>> getMoviesList() async {
-    List<Movie> movies = await movieRepository.fetchMovies();
-
-    return movies.map((movie) {
-      return movie;
-    }).toList();
   }
 
   @override
