@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../data_models/genre.dart';
-import '../data_models/movie.dart';
-import '../repositories/implementation/genres_repository.dart';
-import '../repositories/interface/i_genres_repository.dart';
-import '../utils/error_strings.dart';
+import '../../core/utils/constants/error_strings.dart';
+import '../../core/utils/resources/network_image.dart';
+import '../../data/models/genre.dart';
+import '../../data/models/movie.dart';
+import '../../data/repositories/genres_repository_impl.dart';
+import '../../domain/repositories/genres_repository.dart';
+import '../../config/themes/app_theme.dart';
 import '../widgets/details_box.dart';
 import '../widgets/like_button.dart';
 import '../widgets/movie_header.dart';
@@ -20,25 +22,12 @@ class MovieDetails extends StatefulWidget {
 }
 
 class _MovieDetailsState extends State<MovieDetails> {
-  ColorScheme currentColorScheme = const ColorScheme.light();
+  ColorScheme imageColorScheme = ColorScheme.light();
   static const String genresSeparator = ', ';
-  final IGenresRepository genresRepository = GenresRepository();
-
-  Future<void> _updateImage(ImageProvider provider) async {
-    final ColorScheme newColorScheme =
-        await ColorScheme.fromImageProvider(provider: provider);
-    setState(() {
-      currentColorScheme = newColorScheme;
-    });
-  }
+  final GenresRepository genresRepository = GenresRepositoryImpl();
 
   String getGenresAsString(List<Genre> genres) =>
       genres.map((genre) => genre.name).join(genresSeparator);
-
-  Future<void> _loadPosterProvider(Movie movie) async {
-    final posterProvider = NetworkImage(movie.posterUrl);
-    await _updateImage(posterProvider);
-  }
 
   Future<List<Genre>> mapMovieGenres(Movie movie) async {
     List<Genre> genres = await genresRepository.fetchGenres();
@@ -50,22 +39,27 @@ class _MovieDetailsState extends State<MovieDetails> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
 
-      _loadPosterProvider(movie);
-    });
+        NetworkImageUtil(url: movie.posterUrl).updateColorScheme().then(
+              (value) => setState(
+                () {
+                  imageColorScheme = value;
+                },
+              ),
+            );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
     return Theme(
-      data: ThemeData.from(
-        colorScheme: currentColorScheme,
-      ),
+      data: AppTheme().themeByColorScheme(imageColorScheme),
       child: Scaffold(
-        backgroundColor: currentColorScheme.primary,
         body: SafeArea(
           child: ListView(
             children: [
@@ -78,9 +72,9 @@ class _MovieDetailsState extends State<MovieDetails> {
               FutureBuilder<List<Genre>>(
                 future: mapMovieGenres(movie),
                 builder: (
-                    BuildContext context,
-                    AsyncSnapshot<List<Genre>> snapshot,
-                    ) {
+                  BuildContext context,
+                  AsyncSnapshot<List<Genre>> snapshot,
+                ) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else if (snapshot.connectionState == ConnectionState.done) {

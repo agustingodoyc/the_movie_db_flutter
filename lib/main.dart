@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_db_flutter/src/config/themes/app_theme.dart';
 
-import 'routes/movie_details.dart';
-import 'routes/movie_list.dart';
-import 'utils/route_constants.dart';
+import 'src/config/router/app_router.dart';
 
 void main() => runApp(const MyApp());
 
@@ -11,20 +10,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppRouter appRouter = AppRouter();
+
     return MaterialApp(
-      routes: {
-        RouteConstants.listRoute: (context) => const MovieList(),
-        RouteConstants.movieRoute: (context) => const MovieDetails(),
-      },
-      initialRoute: RouteConstants.listRoute,
-      theme: ThemeData(
-        useMaterial3: true,
-        primaryColor: Colors.blue.shade900,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue.shade900,
-          background: Colors.blue.shade900,
-        ),
-      ),
+      routes: appRouter.routes,
+      initialRoute: appRouter.initialRoute,
+      theme: AppTheme.light,
     );
   }
 }

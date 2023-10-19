@@ -1,4 +1,4 @@
-import '../utils/constants.dart';
+import '../../core/utils/constants/app_strings.dart';
 
 class Movie {
   final bool adult;
@@ -52,7 +52,7 @@ class Movie {
     );
   }
 
-  String get backdropUrl => "${Constants.baseUrl}$backdropPath";
+  String get backdropUrl => "${AppStrings.baseUrl}$backdropPath";
 
-  String get posterUrl => "${Constants.baseUrl}$posterPath";
+  String get posterUrl => "${AppStrings.baseUrl}$posterPath";
 }

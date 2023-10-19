@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/ui_constants.dart';
+import '../../core/utils/constants/app_dimens.dart';
+
 
 class DetailsBox extends StatelessWidget {
   final String releaseDate;
@@ -15,14 +16,13 @@ class DetailsBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(vertical: UIConstants.textsShortPadding),
+      padding: const EdgeInsets.symmetric(vertical: AppDimens.textsShortPadding),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(color: Theme.of(context).focusColor),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: UIConstants.textsShortPadding,
+            vertical: AppDimens.textsShortPadding,
           ),
           child: Column(
             children: [

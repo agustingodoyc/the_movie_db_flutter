@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import '../../data_models/movie.dart';
-import '../interface/i_movies_repository.dart';
+import '../../domain/repositories/movies_repository.dart';
+import '../models/movie.dart';
 
-class MoviesRepository implements IMoviesRepository {
+class MoviesRepositoryImpl implements MoviesRepository {
   static const movies = 'assets/mock_data/movies.json';
   List<Movie> movieList = [];
 
