@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const appBarElevation = 0.0;
+  // Constants
+  static const Color _transparentColor = Colors.transparent;
+  static const String _fontFamily = 'IBM';
+  static const double _appBarElevation = 0.0;
 
-  static ThemeData get light {
-    return ThemeData(
-      appBarTheme: AppBarTheme(
-        elevation: appBarElevation,
-        color: Colors.blue.shade900,
-      ),
-      scaffoldBackgroundColor: Colors.blue.shade900,
-      primaryColor: Colors.blue,
-      splashColor: Colors.transparent,
-      fontFamily: 'IBM',
-      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blue),
-    );
-  }
+  final ColorScheme colorScheme;
 
-  ThemeData themeByColorScheme(ColorScheme colorScheme) {
+  AppTheme({required this.colorScheme});
+
+  ThemeData _buildTheme(Color? backgroundColor) {
+    final Color primaryColor = colorScheme.primary;
     return ThemeData(
-      appBarTheme: AppBarTheme(
-        elevation: appBarElevation,
-        color: colorScheme.secondary,
-      ),
-      scaffoldBackgroundColor: colorScheme.primary,
-      primaryColor: colorScheme.primary,
-      splashColor: Colors.transparent,
-      fontFamily: 'IBM',
       colorScheme: colorScheme,
-      cardColor: colorScheme.primary,
+      scaffoldBackgroundColor: backgroundColor,
+      splashColor: _transparentColor,
+      fontFamily: _fontFamily,
+      appBarTheme: AppBarTheme(
+        elevation: _appBarElevation,
+        color: primaryColor,
+      ),
+      drawerTheme: DrawerThemeData(backgroundColor: primaryColor),
     );
   }
+
+  ThemeData get lightTheme => _buildTheme(Colors.white);
+
+  ThemeData get darkTheme => _buildTheme(colorScheme.primary);
 }
