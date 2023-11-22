@@ -1,21 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:the_movie_db_flutter/src/config/themes/app_theme.dart';
 
 import 'src/config/router/app_router.dart';
+import 'src/config/themes/app_theme.dart';
+import 'src/core/utils/resources/color_scheme_util.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    AppRouter appRouter = AppRouter();
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  ColorScheme _colorScheme = const ColorScheme.light();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        ColorSchemeUtil().colorScheme.then(
+          (value) {
+            setState(
+              () {
+                _colorScheme = value;
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
-      routes: appRouter.routes,
-      initialRoute: appRouter.initialRoute,
-      theme: AppTheme.light,
+      initialRoute: AppRouter.initialRoute,
+      onGenerateRoute: AppRouter.onGenerateRoute,
+      theme: AppTheme(colorScheme: _colorScheme).lightTheme,
     );
   }
 }
