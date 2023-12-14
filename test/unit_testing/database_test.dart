@@ -26,7 +26,8 @@ void main() {
         'findMovies Test',
         () async {
           await mockMovieDao.insertMovie(mockMovie);
-          final actual = await mockMovieDao.findMovies(mockMovie.category.first);
+          final actual =
+              await mockMovieDao.findMovies(mockMovie.category.first);
           expect(
             actual[0].id,
             equals(mockMovie.id),

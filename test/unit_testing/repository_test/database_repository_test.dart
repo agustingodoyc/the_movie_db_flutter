@@ -79,7 +79,9 @@ void main() {
                   any(),
                 ),
               ).thenAnswer(
-                (_) => Future.value(),
+                (_) => Future.value(
+                  any(),
+                ),
               );
               DataState<List<MovieEntity>> localMovies =
                   await databaseRepository
