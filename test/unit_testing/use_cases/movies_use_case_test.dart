@@ -1,42 +1,64 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:the_movie_db_flutter/src/core/utils/enums/endpoint_enum.dart';
-import 'package:the_movie_db_flutter/src/core/utils/resources/data_state.dart';
-import 'package:the_movie_db_flutter/src/data/models/result.dart';
-import 'package:the_movie_db_flutter/src/data/repositories/repository.dart';
-import 'package:the_movie_db_flutter/src/domain/entities/movie_entity.dart';
-import 'package:the_movie_db_flutter/src/domain/use_cases/implementation/movies_use_case.dart';
+import 'package:the_movie_db_flutter/src/core/utils/index.dart';
+import 'package:the_movie_db_flutter/src/data/index.dart';
+import 'package:the_movie_db_flutter/src/domain/index.dart';
+
+import '../../utils/mock_entity.dart';
 
 class MockMoviesRepository extends Mock implements Repository {}
 
+class MockDatabaseRepository extends Mock implements DatabaseRepository {}
+
 void main() {
   late Repository repository;
+  late DatabaseRepository databaseRepository;
   late MoviesUseCase moviesUseCase;
-  const Result mockResult = Result(
+  const EndpointEnum endpoint = EndpointEnum.popular;
+  Result mockResult = Result(
     page: 1,
-    results: [],
+    results: [MockEntity.movieModel],
     totalPages: 1,
     totalResults: 1,
   );
 
   setUp(() {
     repository = MockMoviesRepository();
-    moviesUseCase = MoviesUseCase(repository: repository);
-    registerFallbackValue(EndpointEnum.upcoming);
+    databaseRepository = MockDatabaseRepository();
+    moviesUseCase = MoviesUseCase(
+      repository: repository,
+      databaseRepository: databaseRepository,
+    );
+    registerFallbackValue(endpoint);
   });
 
   test(
     'Success Testing',
     () async {
       when(
-        () => repository.fetchMovies(EndpointEnum.upcoming),
+        () => repository.fetchMovies(endpoint),
       ).thenAnswer(
         (_) => Future.value(
-          const DataSuccess(data: mockResult),
+          DataSuccess(data: mockResult),
+        ),
+      );
+      when(
+        () => databaseRepository.saveMovie(
+          mockResult.results.first,
+          endpoint,
+        ),
+      ).thenAnswer(
+        (_) => Future.value(),
+      );
+      when(
+        () => databaseRepository.getSavedMovies(endpoint),
+      ).thenAnswer(
+        (_) => Future.value(
+          DataSuccess(data: [MockEntity.movie]),
         ),
       );
       DataState<List<MovieEntity>> result =
-          await moviesUseCase.call(params: EndpointEnum.upcoming);
+          await moviesUseCase.call(params: endpoint);
       expect(
         result,
         isA<DataSuccess<List<MovieEntity>>>(),

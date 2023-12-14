@@ -6,9 +6,9 @@ import 'package:http/http.dart';
 import '../../../core/utils/index.dart';
 
 class ApiService {
-  final Client _client;
+  final Client client;
 
-  ApiService({Client? client}) : _client = client ?? Client();
+  ApiService({required this.client});
 
   Future<DataState<Map<String, dynamic>>> fetchMovies(
     EndpointEnum endpoint,
@@ -25,7 +25,7 @@ class ApiService {
 
   Future<DataState<Map<String, dynamic>>> _fetch(String uri) async {
     try {
-      final response = await _client.get(
+      final response = await client.get(
         Uri.parse(uri),
       );
       if (response.statusCode == HttpStatus.ok) {

@@ -13,14 +13,17 @@ class Result {
     required this.totalResults,
   });
 
-  factory Result.fromJson(Map<String, dynamic> json) {
+  factory Result.fromJson(Map<String, dynamic> json, String category) {
     return Result(
       page: json['page'],
       results: List.from(
         json['results'],
       )
           .map(
-            (e) => MovieModel.fromJson(e),
+            (movie) => MovieModel.fromJson(
+              movie as Map<String, dynamic>,
+              category,
+            ),
           )
           .toList(),
       totalPages: json['total_pages'],

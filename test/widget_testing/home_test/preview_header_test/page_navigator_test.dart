@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:the_movie_db_flutter/src/config/router/app_router.dart';
-import 'package:the_movie_db_flutter/src/core/utils/enums/page_enum.dart';
-import 'package:the_movie_db_flutter/src/presentation/widgets/home/preview_header/page_navigator.dart';
+import 'package:the_movie_db_flutter/src/core/index.dart';
+import 'package:the_movie_db_flutter/src/presentation/index.dart';
+
+import '../../../utils/mock_route.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
@@ -22,7 +23,7 @@ void main() {
 
   testWidgets(
     'PageNavigator UI Test',
-    (WidgetTester tester) async {
+        (WidgetTester tester) async {
       const mockPage = PageEnum.popular;
       await tester.pumpWidget(
         const MaterialApp(
@@ -39,11 +40,11 @@ void main() {
 
   testWidgets(
     'PageNavigator Navigation Test',
-    (WidgetTester tester) async {
+        (WidgetTester tester) async {
       const mockPage = PageEnum.popular;
       await tester.pumpWidget(
         MaterialApp(
-          onGenerateRoute: AppRouter.onGenerateRoute,
+          onGenerateRoute: MockRouter.mockRoute,
           navigatorObservers: [mockObserver],
           home: const PageNavigator(page: mockPage),
         ),
@@ -53,9 +54,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      verify(() => mockObserver.didPush(any(), any())).called(2);
-      // The first call is the normal flow of the app, the second is the
-      // expected navigation
+      expect(find.text('Next Page'), findsOneWidget);
     },
   );
 }

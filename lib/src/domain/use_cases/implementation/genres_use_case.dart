@@ -1,22 +1,40 @@
 import '../../../core/index.dart';
-import '../../../data/repositories/repository.dart';
+import '../../../data/repositories/index.dart';
 import '../../entities/genre_entity.dart';
 import '../i_use_case.dart';
 
 class GenresUseCase implements IUseCase {
-  final Repository _repository;
+  final Repository repository;
+  final DatabaseRepository databaseRepository;
 
-  GenresUseCase({Repository? repository})
-      : _repository = repository ?? Repository();
+  GenresUseCase({
+    required this.repository,
+    required this.databaseRepository,
+  });
 
   @override
   Future<DataState<List<GenreEntity>>> call({params}) async {
-    final response = await _repository.fetchGenres();
-    if (response is DataSuccess) {
-      return DataSuccess(data: response.data!);
-    } else {
+    try {
+      final remoteGenres = await repository.fetchGenres();
+      if (remoteGenres is DataSuccess) {
+        await Future.forEach(
+          remoteGenres.data!,
+          (GenreEntity genre) async {
+            databaseRepository.saveGenre(genre);
+          },
+        );
+        return DataSuccess(data: remoteGenres.data!);
+      } else {
+        final savedGenres = await databaseRepository.getSavedGenres();
+        if (savedGenres.data!.isEmpty) {
+          return const DataEmpty();
+        } else {
+          return DataSuccess(data: savedGenres.data!);
+        }
+      }
+    } catch (e) {
       return DataFailed(
-        error: response.error ?? Exception(ErrorEnum.error),
+        error: Exception(ErrorEnum.error),
       );
     }
   }

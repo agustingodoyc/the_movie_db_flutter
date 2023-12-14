@@ -2,28 +2,36 @@ import 'dart:async';
 
 import '../../core/index.dart';
 import '../../data/models/movie_preview.dart';
-import '../../domain/entities/genre_entity.dart';
-import '../../domain/entities/movie_entity.dart';
-import '../../domain/use_cases/implementation/genres_use_case.dart';
-import '../../domain/use_cases/implementation/movies_use_case.dart';
+import '../../domain/index.dart';
+import 'stream/endpoint_stream.dart';
 
 class MoviesBloc implements IBloc {
-  final GenresUseCase _genresUseCase;
-  final MoviesUseCase _moviesUseCase;
+  final GenresUseCase genresUseCase;
+  final MoviesUseCase moviesUseCase;
+  final List<EndpointStream> endpointStreams = [];
 
   MoviesBloc({
-    GenresUseCase? genresUseCase,
-    MoviesUseCase? moviesUseCase,
-  })  : _genresUseCase = genresUseCase ?? GenresUseCase(),
-        _moviesUseCase = moviesUseCase ?? MoviesUseCase();
+    required this.genresUseCase,
+    required this.moviesUseCase,
+  });
 
-  final _movies = StreamController<DataState<List<MoviePreview>>>.broadcast();
+  void _createEndpointStream() {
+    for (EndpointEnum endpoint in EndpointEnum.values) {
+      endpointStreams.add(
+        EndpointStream(endpoint: endpoint),
+      );
+    }
+  }
 
-  Stream<DataState<List<MoviePreview>>> get moviesStream => _movies.stream;
+  Stream<DataState<List<MoviePreview>>> moviesStream(EndpointEnum endpoint) =>
+      endpointStreams
+          .where((element) => element.endpoint == endpoint)
+          .first
+          .moviesStream;
 
   Future<List<GenreEntity>> _fetchMoviesGenres(List<int> genresId) async {
     List<GenreEntity> movieGenres = [];
-    final result = await _genresUseCase.call(params: genresId);
+    final result = await genresUseCase.call(params: genresId);
     if (result is DataSuccess) {
       return movieGenres = result.data!;
     } else {
@@ -31,52 +39,73 @@ class MoviesBloc implements IBloc {
     }
   }
 
-  void _addStateStream(DataState<List<MoviePreview>> result) {
-    _movies.sink.add(result);
+  void _addStateStream(
+    DataState<List<MoviePreview>> result,
+    EndpointEnum endpoint,
+  ) {
+    endpointStreams
+        .where((element) => element.endpoint == endpoint)
+        .first
+        .movies
+        .sink
+        .add(result);
   }
 
   Future<void> fetchEndpointsMovies(EndpointEnum endpoint) async {
     List<MovieEntity> movieListEndpoint = [];
     _addStateStream(
       const DataLoading(),
+      endpoint,
     );
-    final result = await _moviesUseCase.call(params: endpoint);
-    if (result is DataSuccess) {
-      movieListEndpoint = result.data ?? [];
-      List<GenreEntity> genres = await _fetchMoviesGenres(
-        movieListEndpoint
-            .map((movie) => movie.genreIds)
-            .expand((element) => element)
-            .toList(),
-      );
-      List<MoviePreview> moviePreview = movieListEndpoint.map(
-        (movie) {
-          final movieGenres = genres
-              .where(
-                (genre) => movie.genreIds.contains(genre.id),
-              )
-              .toList();
-          return MoviePreview(movie, movieGenres);
-        },
-      ).toList();
-      _addStateStream(
-        DataSuccess(data: moviePreview),
-      );
-    } else {
-      _addStateStream(
+    try {
+      final result = await moviesUseCase.call(params: endpoint);
+      if (result is DataSuccess) {
+        movieListEndpoint = result.data ?? [];
+        List<GenreEntity> genres = await _fetchMoviesGenres(
+          movieListEndpoint
+              .map((movie) => movie.genreIds)
+              .expand((element) => element)
+              .toList(),
+        );
+        List<MoviePreview> moviePreview = movieListEndpoint.map(
+          (movie) {
+            final movieGenres = genres
+                .where(
+                  (genre) => movie.genreIds.contains(genre.id),
+                )
+                .toList();
+            return MoviePreview(movie, movieGenres);
+          },
+        ).toList();
+        _addStateStream(
+          DataSuccess(data: moviePreview),
+          endpoint,
+        );
+      } else {
+        _addStateStream(
+          DataFailed(
+            error: Exception(ErrorEnum.error),
+          ),
+          endpoint,
+        );
+      }
+    } catch (e) {
+      return _addStateStream(
         DataFailed(
-          error: Exception(ErrorEnum.error),
+          error: Exception(e),
         ),
+        endpoint,
       );
     }
   }
 
   @override
   Future<void> dispose() async {
-    _movies.close();
+    endpointStreams.map((stream) => stream.movies.close());
   }
 
   @override
   Future<void> initialize() async {
+    _createEndpointStream();
   }
 }

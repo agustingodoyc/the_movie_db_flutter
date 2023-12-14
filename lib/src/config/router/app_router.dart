@@ -13,49 +13,61 @@ class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case NavigationRoutes.home:
-        return _buildHomeRoute(settings);
+        return _buildRoute(
+          settings,
+          const Home(),
+        );
       case NavigationRoutes.page:
         return _buildMoviesPageRoute(settings);
       case NavigationRoutes.movie:
         return _buildMovieDetailsRoute(settings);
       default:
-        return _buildErrorRoute(settings);
+        return _buildRoute(
+          settings,
+          const ErrorPage(),
+        );
     }
   }
 
-  static MaterialPageRoute _buildHomeRoute(RouteSettings settings) =>
+  static MaterialPageRoute _buildRoute(
+    RouteSettings settings,
+    Widget page,
+  ) =>
       MaterialPageRoute(
-        builder: (_) => const Home(),
+        builder: (_) => page,
         settings: settings,
       );
 
   static MaterialPageRoute _buildMoviesPageRoute(RouteSettings settings) {
-    if (settings.arguments is PageEnum) {
-      final pageEnum = settings.arguments as PageEnum;
-      return MaterialPageRoute(
-        builder: (_) => MoviesPage(pageEnum: pageEnum),
-        settings: settings,
+    if (_isValidPageEnum(settings.arguments)) {
+      return _buildRoute(
+        settings,
+        MoviesPage(pageEnum: settings.arguments as PageEnum),
       );
     } else {
-      return _buildErrorRoute(settings);
+      return _buildRoute(
+        settings,
+        const ErrorPage(),
+      );
     }
   }
+
+  static bool _isValidPageEnum(Object? argument) => argument is PageEnum;
 
   static MaterialPageRoute _buildMovieDetailsRoute(RouteSettings settings) {
-    if (settings.arguments is MoviePreview) {
-      final moviePreview = settings.arguments as MoviePreview;
-      return MaterialPageRoute(
-        builder: (_) => MovieDetails(moviePreview: moviePreview),
-        settings: settings,
+    if (_isValidMoviePreview(settings.arguments)) {
+      return _buildRoute(
+        settings,
+        MovieDetails(moviePreview: settings.arguments as MoviePreview),
       );
     } else {
-      return _buildErrorRoute(settings);
+      return _buildRoute(
+        settings,
+        const ErrorPage(),
+      );
     }
   }
 
-  static MaterialPageRoute _buildErrorRoute(RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (_) => const ErrorPage(),
-        settings: settings,
-      );
+  static bool _isValidMoviePreview(Object? argument) =>
+      argument is MoviePreview;
 }
