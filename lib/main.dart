@@ -6,7 +6,7 @@ import 'src/core/utils/resources/color_scheme_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  DependencyHandler dependencyHandler = DependencyHandler();
+  var dependencyHandler = DependencyHandler();
   await dependencyHandler.initialize();
 
   runApp(

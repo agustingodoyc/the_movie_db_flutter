@@ -13,7 +13,10 @@ class Result {
     required this.totalResults,
   });
 
-  factory Result.fromJson(Map<String, dynamic> json, String category) {
+  factory Result.fromJson(
+    Map<String, dynamic> json,
+    String category,
+  ) {
     return Result(
       page: json['page'],
       results: List.from(

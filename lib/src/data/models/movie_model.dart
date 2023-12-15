@@ -19,7 +19,10 @@ class MovieModel extends MovieEntity {
     required super.category,
   });
 
-  factory MovieModel.fromJson(Map<String, dynamic> result, String category) {
+  factory MovieModel.fromJson(
+    Map<String, dynamic> result,
+    String category,
+  ) {
     return MovieModel(
       adult: result['adult'],
       backdropPath: result['backdrop_path'],

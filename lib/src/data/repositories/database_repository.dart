@@ -18,11 +18,10 @@ class DatabaseRepository implements IDatabaseRepository {
     EndpointEnum endpoint,
   ) async {
     MovieEntity? existingMovie = await getMovieById(movie);
-    if (existingMovie != null) {
-      if (!existingMovie.category.contains(endpoint.name)) {
-        existingMovie.category.add(endpoint.name);
-        await database.movieDao.insertMovie(existingMovie);
-      }
+    if (existingMovie != null &&
+        !existingMovie!.category.contains(endpoint.name)) {
+      existingMovie.category.add(endpoint.name);
+      await database.movieDao.insertMovie(existingMovie);
     } else {
       await database.movieDao.insertMovie(movie);
     }

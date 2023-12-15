@@ -3,7 +3,10 @@ import '../../core/utils/resources/data_state.dart';
 import '../entities/index.dart';
 
 abstract class IDatabaseRepository {
-  Future<void> saveMovie(MovieEntity movie, EndpointEnum endpoint);
+  Future<void> saveMovie(
+    MovieEntity movie,
+    EndpointEnum endpoint,
+  );
 
   Future<DataState<List<MovieEntity>>> getSavedMovies(EndpointEnum endpoint);
 
