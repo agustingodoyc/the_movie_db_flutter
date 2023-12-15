@@ -31,9 +31,9 @@ class DatabaseRepository implements IDatabaseRepository {
   Future<DataState<List<MovieEntity>>> getSavedMovies(
     EndpointEnum endpoint,
   ) async {
-    List<MovieEntity> savedMovies = [];
     try {
-      savedMovies = await database.movieDao.findMovies(endpoint.name);
+      List<MovieEntity> savedMovies =
+          await database.movieDao.findMovies(endpoint.name);
       return DataSuccess(data: savedMovies);
     } catch (e) {
       return DataFailed(error: Exception(e));
@@ -55,9 +55,8 @@ class DatabaseRepository implements IDatabaseRepository {
 
   @override
   Future<DataState<List<GenreEntity>>> getSavedGenres() async {
-    List<GenreEntity> savedGenres = [];
     try {
-      savedGenres = await database.genreDao.findGenres();
+      List<GenreEntity> savedGenres = await database.genreDao.findGenres();
       return DataSuccess(data: savedGenres);
     } catch (e) {
       return DataFailed(

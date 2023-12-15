@@ -5,7 +5,7 @@ import 'package:the_movie_db_flutter/src/domain/entities/index.dart';
 import '../utils/mock_entity.dart';
 
 void main() {
-  late AppDatabase mockDatabase;
+  late AppDatabase appDatabase;
   late MovieDao mockMovieDao;
   late GenreDao mockGenreDao;
   MovieEntity mockMovie = MockEntity.movie;
@@ -13,9 +13,9 @@ void main() {
 
   setUp(
     () async {
-      mockDatabase = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
-      mockMovieDao = mockDatabase.movieDao;
-      mockGenreDao = mockDatabase.genreDao;
+      appDatabase = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
+      mockMovieDao = appDatabase.movieDao;
+      mockGenreDao = appDatabase.genreDao;
     },
   );
 
@@ -80,7 +80,7 @@ void main() {
 
   tearDown(
     () async {
-      await mockDatabase.close();
+      await appDatabase.close();
     },
   );
 }
