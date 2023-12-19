@@ -10,7 +10,7 @@ class AppTheme {
 
   AppTheme({required this.colorScheme});
 
-  ThemeData _buildTheme(Color? backgroundColor) {
+  ThemeData _buildThemeWithBackgroundColor(Color? backgroundColor) {
     final Color primaryColor = colorScheme.primary;
     return ThemeData(
       colorScheme: colorScheme,
@@ -25,7 +25,8 @@ class AppTheme {
     );
   }
 
-  ThemeData get lightTheme => _buildTheme(Colors.white);
+  ThemeData get lightTheme => _buildThemeWithBackgroundColor(Colors.white);
 
-  ThemeData get darkTheme => _buildTheme(colorScheme.primary);
+  ThemeData get darkTheme =>
+      _buildThemeWithBackgroundColor(colorScheme.primary);
 }

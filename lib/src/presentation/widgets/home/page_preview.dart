@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../config/dependency_handler.dart';
 import '../../../core/utils/enums/page_enum.dart';
 import '../../blocs/movies_bloc.dart';
 import 'movies_row/movies_row.dart';
@@ -18,7 +20,16 @@ class PagePreview extends StatefulWidget {
 }
 
 class _PagePreviewState extends State<PagePreview> {
-  final MoviesBloc _moviesBloc = MoviesBloc();
+  late MoviesBloc moviesBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    moviesBloc = Provider.of<DependencyHandler>(
+      context,
+      listen: false,
+    ).moviesBloc;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +40,7 @@ class _PagePreviewState extends State<PagePreview> {
           PreviewHeader(page: widget.page),
           MoviesRow(
             endpoint: widget.page.endpoint,
-            moviesBloc: _moviesBloc,
+            moviesBloc: moviesBloc,
           ),
         ],
       ),

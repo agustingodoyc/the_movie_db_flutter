@@ -35,7 +35,7 @@ class _MoviesColumnState extends State<MoviesColumn> {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder(
-          stream: widget.moviesBloc.moviesStream,
+          stream: widget.moviesBloc.moviesStream(widget.endpoint),
           builder: (
             context,
             snapshot,

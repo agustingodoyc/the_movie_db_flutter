@@ -1,11 +1,23 @@
+import 'package:floor/floor.dart';
 
-import '../../core/utils/constants/index.dart';
+import '../../core/index.dart';
 
+@Entity(tableName: 'MovieEntity')
+@TypeConverters(
+  [
+    GenreIdList,
+    NullableNum,
+    StringList,
+  ],
+)
 class MovieEntity {
   final bool? adult;
   final String? backdropPath;
   final List<int> genreIds;
+
+  @primaryKey
   final int? id;
+
   final String? originalLanguage;
   final String? originalTitle;
   final String? overview;
@@ -16,6 +28,7 @@ class MovieEntity {
   final bool? video;
   final num? voteAverage;
   final int? voteCount;
+  final List<String> category;
 
   MovieEntity({
     required this.adult,
@@ -32,6 +45,7 @@ class MovieEntity {
     required this.video,
     required this.voteAverage,
     required this.voteCount,
+    required this.category,
   });
 
   String get backdropUrl => '${ApiRoutes.image}$backdropPath';

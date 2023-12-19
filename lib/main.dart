@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'src/config/router/app_router.dart';
-import 'src/config/themes/app_theme.dart';
+import 'src/config/index.dart';
 import 'src/core/utils/resources/color_scheme_util.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var dependencyHandler = DependencyHandler();
+  await dependencyHandler.initialize();
+
+  runApp(
+    Provider(
+      create: (BuildContext context) => dependencyHandler,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -22,11 +31,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
+          (_) {
         ColorSchemeUtil().colorScheme.then(
-          (value) {
+              (value) {
             setState(
-              () {
+                  () {
                 _colorScheme = value;
               },
             );

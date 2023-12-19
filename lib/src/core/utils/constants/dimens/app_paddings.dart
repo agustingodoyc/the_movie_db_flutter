@@ -1,3 +1,4 @@
+/// A class that defines standard padding values used throughout the app.
 abstract class AppPaddings {
   static const double backdropLeft = 80.0;
   static const double image = 20.0;

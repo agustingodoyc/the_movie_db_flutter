@@ -32,7 +32,7 @@ class _MoviesRowState extends State<MoviesRow> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: widget.moviesBloc.moviesStream,
+      stream: widget.moviesBloc.moviesStream(widget.endpoint),
       builder: (
         BuildContext context,
         AsyncSnapshot<DataState<List<MoviePreview>>> snapshot,
@@ -44,7 +44,10 @@ class _MoviesRowState extends State<MoviesRow> {
               height: height,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: itemCount,
+                itemCount: snapshot.data!.data!.length.clamp(
+                  0,
+                  itemCount,
+                ),
                 itemBuilder: (
                   BuildContext context,
                   int index,

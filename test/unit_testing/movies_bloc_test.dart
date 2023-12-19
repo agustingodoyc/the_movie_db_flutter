@@ -21,27 +21,28 @@ void main() async {
   final List<GenreEntity> genresList = [];
 
   setUp(
-    () {
+    () async {
       mockUseCaseMovies = MockUseCaseMovies();
       mockUseCaseGenres = MockUseCaseGenres();
       moviesBloc = MoviesBloc(
         genresUseCase: mockUseCaseGenres,
         moviesUseCase: mockUseCaseMovies,
       );
+      await moviesBloc.initialize();
       registerFallbackValue(EndpointEnum.popular);
       when(
-            () => mockUseCaseMovies.call(
+        () => mockUseCaseMovies.call(
           params: any(named: 'params'),
         ),
       ).thenAnswer(
-            (_) async => DataSuccess(data: movie),
+        (_) async => DataSuccess(data: movie),
       );
       when(
-            () => mockUseCaseGenres.call(
+        () => mockUseCaseGenres.call(
           params: any(named: 'params'),
         ),
       ).thenAnswer(
-            (_) async => DataSuccess(data: genresList),
+        (_) async => DataSuccess(data: genresList),
       );
     },
   );
@@ -49,8 +50,9 @@ void main() async {
   test(
     'Success test',
     () async {
-      Stream<StateEnum> resultPopular =
-          moviesBloc.moviesStream.map((event) => event.state);
+      Stream<StateEnum> resultPopular = moviesBloc
+          .moviesStream(EndpointEnum.popular)
+          .map((event) => event.state);
 
       final expected = [
         StateEnum.loading,
@@ -83,9 +85,7 @@ void main() async {
     },
   );
 
-  test(
-      'Failed test',
-      () async {
+  test('Failed test', () async {
     when(
       () => mockUseCaseMovies.call(
         params: any(named: 'params'),
@@ -104,18 +104,19 @@ void main() async {
         error: Exception(ErrorEnum.error),
       ),
     );
-    Stream<StateEnum> resultTopRated =
-        moviesBloc.moviesStream.map((event) => event.state);
+    Stream<StateEnum> resultTopRated = moviesBloc
+        .moviesStream(EndpointEnum.topRated)
+        .map((event) => event.state);
 
     final expected = [
       StateEnum.loading,
       StateEnum.failure,
     ];
-    expect(
+    expectLater(
       resultTopRated,
       emitsInOrder(expected),
     );
-    moviesBloc.fetchEndpointsMovies(EndpointEnum.topRated);
+    await moviesBloc.fetchEndpointsMovies(EndpointEnum.topRated);
   });
 
   tearDown(

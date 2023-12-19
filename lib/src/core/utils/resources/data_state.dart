@@ -31,3 +31,10 @@ class DataFailed<T> extends DataState<T> {
           error: error,
         );
 }
+
+class DataEmpty<T> extends DataState<T> {
+  const DataEmpty()
+      : super(
+          state: StateEnum.empty,
+        );
+}

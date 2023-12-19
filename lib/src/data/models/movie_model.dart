@@ -16,9 +16,13 @@ class MovieModel extends MovieEntity {
     required super.video,
     required super.voteAverage,
     required super.voteCount,
+    required super.category,
   });
 
-  factory MovieModel.fromJson(Map<String, dynamic> result) {
+  factory MovieModel.fromJson(
+    Map<String, dynamic> result,
+    String category,
+  ) {
     return MovieModel(
       adult: result['adult'],
       backdropPath: result['backdrop_path'],
@@ -34,6 +38,7 @@ class MovieModel extends MovieEntity {
       video: result['video'],
       voteAverage: result['vote_average'],
       voteCount: result['vote_count'],
+      category: <String>[category],
     );
   }
 }

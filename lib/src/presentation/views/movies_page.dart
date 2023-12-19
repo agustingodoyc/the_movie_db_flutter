@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../config/dependency_handler.dart';
 import '../../core/utils/enums/page_enum.dart';
 import '../blocs/movies_bloc.dart';
 import '../widgets/general/app_drawer/app_drawer.dart';
@@ -24,7 +26,10 @@ class _MoviesPageState extends State<MoviesPage> {
   @override
   void initState() {
     super.initState();
-    _moviesBloc = MoviesBloc();
+    _moviesBloc = Provider.of<DependencyHandler>(
+      context,
+      listen: false,
+    ).moviesBloc;
   }
 
   @override
