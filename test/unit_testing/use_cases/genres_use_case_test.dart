@@ -5,7 +5,7 @@ import 'package:the_movie_db_flutter/src/data/index.dart';
 import 'package:the_movie_db_flutter/src/domain/entities/genre_entity.dart';
 import 'package:the_movie_db_flutter/src/domain/use_cases/implementation/genres_use_case.dart';
 
-class MockGenresRepository extends Mock implements Repository {}
+class MockRepository extends Mock implements Repository {}
 
 class MockDatabaseRepository extends Mock implements DatabaseRepository {}
 
@@ -16,7 +16,7 @@ void main() {
   const List<GenreModel> mockResult = [];
 
   setUp(() {
-    repository = MockGenresRepository();
+    repository = MockRepository();
     databaseRepository = MockDatabaseRepository();
     genresUseCase = GenresUseCase(
       repository: repository,

@@ -6,36 +6,47 @@ import '../../domain/index.dart';
 import 'stream/endpoint_stream.dart';
 
 class MoviesBloc implements IBloc {
-  final GenresUseCase genresUseCase;
-  final MoviesUseCase moviesUseCase;
-  final List<EndpointStream> endpointStreams = [];
+  final GenresUseCase _genresUseCase;
+  final MoviesUseCase _moviesUseCase;
+  final FavoritesUseCase _favoritesUseCase;
+  final List<EndpointStream> _endpointStreams = [];
+  final List<FavoriteEntity> _favoriteMovies = [];
 
   MoviesBloc({
-    required this.genresUseCase,
-    required this.moviesUseCase,
-  });
+    required GenresUseCase genresUseCase,
+    required MoviesUseCase moviesUseCase,
+    required FavoritesUseCase favoritesUseCase,
+  })  : _moviesUseCase = moviesUseCase,
+        _genresUseCase = genresUseCase,
+        _favoritesUseCase = favoritesUseCase;
 
   void _createEndpointStream() {
     for (EndpointEnum endpoint in EndpointEnum.values) {
-      endpointStreams.add(
+      _endpointStreams.add(
         EndpointStream(endpoint: endpoint),
       );
     }
   }
 
   Stream<DataState<List<MoviePreview>>> moviesStream(EndpointEnum endpoint) =>
-      endpointStreams
+      _endpointStreams
           .where((element) => element.endpoint == endpoint)
           .first
           .moviesStream;
 
   Future<List<GenreEntity>> _fetchMoviesGenres(List<int> genresId) async {
-    List<GenreEntity> movieGenres = [];
-    final result = await genresUseCase.call(params: genresId);
-    if (result is DataSuccess) {
-      return movieGenres = result.data!;
+    final movieGenres = await _genresUseCase.call(params: genresId);
+    if (movieGenres is DataSuccess) {
+      return movieGenres.data!;
     } else {
-      return movieGenres;
+      return [];
+    }
+  }
+
+  Future<void> _fetchFavoriteMovies() async {
+    final result = await _favoritesUseCase.call();
+    if (result is DataSuccess) {
+      _favoriteMovies.addAll(result.data!);
     }
   }
 
@@ -43,22 +54,21 @@ class MoviesBloc implements IBloc {
     DataState<List<MoviePreview>> result,
     EndpointEnum endpoint,
   ) {
-    endpointStreams
+    _endpointStreams
         .where((element) => element.endpoint == endpoint)
         .first
         .movies
-        .sink
         .add(result);
   }
 
-  Future<void> fetchEndpointsMovies(EndpointEnum endpoint) async {
+  Future<void> fetchMoviesByEndpoint(EndpointEnum endpoint) async {
     List<MovieEntity> movieListEndpoint = [];
     _addStateStream(
       const DataLoading(),
       endpoint,
     );
     try {
-      final result = await moviesUseCase.call(params: endpoint);
+      final result = await _moviesUseCase.call(params: endpoint);
       if (result is DataSuccess) {
         movieListEndpoint = result.data ?? [];
         List<GenreEntity> genres = await _fetchMoviesGenres(
@@ -74,7 +84,12 @@ class MoviesBloc implements IBloc {
                   (genre) => movie.genreIds.contains(genre.id),
                 )
                 .toList();
-            return MoviePreview(movie, movieGenres);
+            final favoriteEntity = FavoriteEntity(id: movie.id);
+            return MoviePreview(
+              movie: movie,
+              genres: movieGenres,
+              isFavorite: _favoriteMovies.contains(favoriteEntity),
+            );
           },
         ).toList();
         _addStateStream(
@@ -99,13 +114,24 @@ class MoviesBloc implements IBloc {
     }
   }
 
+  Future<void> updateFavorite(int id) async {
+    _favoriteMovies.clear();
+    final result = await _favoritesUseCase.call(params: id);
+    if (result is DataSuccess) {
+      _favoriteMovies.addAll(result.data!);
+    }
+  }
+
   @override
   Future<void> dispose() async {
-    endpointStreams.map((stream) => stream.movies.close());
+    _endpointStreams.map(
+      (stream) => stream.movies.close(),
+    );
   }
 
   @override
   Future<void> initialize() async {
+    await _fetchFavoriteMovies();
     _createEndpointStream();
   }
 }

@@ -6,9 +6,15 @@ void main() {
   testWidgets(
     'LikeButton Test',
     (WidgetTester tester) async {
+      bool isFavorite = false;
       await tester.pumpWidget(
-        const MaterialApp(
-          home: LikeButton(),
+        MaterialApp(
+          home: LikeButton(
+            isFavorite: isFavorite,
+            onTap: () {
+              isFavorite = true;
+            },
+          ),
         ),
       );
 

@@ -21,7 +21,7 @@ class MoviesColumn extends StatefulWidget {
 class _MoviesColumnState extends State<MoviesColumn> {
   @override
   void initState() {
-    widget.moviesBloc.fetchEndpointsMovies(widget.endpoint);
+    widget.moviesBloc.fetchMoviesByEndpoint(widget.endpoint);
     super.initState();
   }
 

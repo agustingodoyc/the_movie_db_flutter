@@ -1,5 +1,8 @@
 /// A class that defines various title constants for the app.
 abstract class AppTitles {
+  //App title
+  static const String appTitle = 'The Movie Database';
+
   // Titles for different movie categories.
   static const String movies = 'Movies';
   static const String popular = 'Popular';

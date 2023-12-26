@@ -14,10 +14,13 @@ part 'database.g.dart';
   entities: <Type>[
     MovieEntity,
     GenreEntity,
+    FavoriteEntity,
   ],
 )
 abstract class AppDatabase extends FloorDatabase {
   MovieDao get movieDao;
 
   GenreDao get genreDao;
+
+  FavoriteDao get favoriteDao;
 }

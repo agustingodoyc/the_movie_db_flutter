@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'src/config/index.dart';
@@ -8,6 +9,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var dependencyHandler = DependencyHandler();
   await dependencyHandler.initialize();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await FlutterLocalNotificationsPlugin().initialize(initializationSettings);
 
   runApp(
     Provider(
@@ -31,11 +40,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
+      (_) {
         ColorSchemeUtil().colorScheme.then(
-              (value) {
+          (value) {
             setState(
-                  () {
+              () {
                 _colorScheme = value;
               },
             );

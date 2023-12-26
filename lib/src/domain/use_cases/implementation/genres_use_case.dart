@@ -20,7 +20,7 @@ class GenresUseCase implements IUseCase {
         await Future.forEach(
           remoteGenres.data!,
           (GenreEntity genre) async {
-            databaseRepository.saveGenre(genre);
+            await databaseRepository.saveGenre(genre);
           },
         );
         return DataSuccess(data: remoteGenres.data!);

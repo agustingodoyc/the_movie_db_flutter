@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../config/themes/app_theme.dart';
-import '../../core/utils/constants/index.dart';
-import '../../core/utils/resources/color_scheme_util.dart';
+import '../../config/index.dart';
+import '../../core/utils/index.dart';
 import '../../data/models/movie_preview.dart';
 import '../../domain/entities/movie_entity.dart';
-import '../widgets/general/app_drawer/app_drawer.dart';
-import '../widgets/movie_details/details_text/details_text.dart';
-import '../widgets/movie_details/details_vote_average.dart';
-import '../widgets/movie_details/like_button.dart';
-import '../widgets/movie_details/movie_header.dart';
-import '../widgets/movie_details/movie_title.dart';
+import '../blocs/movies_bloc.dart';
+import '../widgets/index.dart';
 
 class MovieDetails extends StatefulWidget {
   final MoviePreview moviePreview;
 
-  const MovieDetails({super.key, required this.moviePreview});
+  const MovieDetails({
+    super.key,
+    required this.moviePreview,
+  });
 
   @override
   State<MovieDetails> createState() => _MovieDetailsState();
 }
 
 class _MovieDetailsState extends State<MovieDetails> {
+  late MoviesBloc _moviesBloc;
   ColorScheme _imageColorScheme = const ColorScheme.light();
+  final notificationManager = NotificationManager();
 
   @override
   void initState() {
@@ -40,15 +41,20 @@ class _MovieDetailsState extends State<MovieDetails> {
             );
       },
     );
+    _moviesBloc = Provider.of<DependencyHandler>(
+      context,
+      listen: false,
+    ).moviesBloc;
   }
 
   @override
   Widget build(BuildContext context) {
-    final MovieEntity movie = widget.moviePreview.movie;
+    final MoviePreview payload = widget.moviePreview;
+    final MovieEntity movie = payload.movie;
     return Theme(
       data: AppTheme(colorScheme: _imageColorScheme).darkTheme,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: const IconBar(),
         body: SafeArea(
           child: ListView(
             children: [
@@ -68,8 +74,19 @@ class _MovieDetailsState extends State<MovieDetails> {
                   voteAverage: movie.voteAverage ?? MovieDefaults.voteAverage,
                 ),
               ),
-              DetailsText(payload: widget.moviePreview),
-              const LikeButton(),
+              DetailsText(payload: payload),
+              LikeButton(
+                isFavorite: payload.isFavorite,
+                onTap: () {
+                  setState(() {
+                    _moviesBloc.updateFavorite(movie.id!);
+                    payload.isFavorite = !payload.isFavorite;
+                  });
+                  payload.isFavorite
+                      ? notificationManager.addedFavorite()
+                      : notificationManager.removedFavorite();
+                },
+              ),
             ],
           ),
         ),

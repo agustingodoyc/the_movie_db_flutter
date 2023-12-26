@@ -25,7 +25,7 @@ class _MoviesRowState extends State<MoviesRow> {
 
   @override
   void initState() {
-    widget.moviesBloc.fetchEndpointsMovies(widget.endpoint);
+    widget.moviesBloc.fetchMoviesByEndpoint(widget.endpoint);
     super.initState();
   }
 

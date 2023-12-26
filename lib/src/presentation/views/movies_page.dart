@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/dependency_handler.dart';
-import '../../core/utils/enums/page_enum.dart';
+import '../../core/utils/index.dart';
 import '../blocs/movies_bloc.dart';
-import '../widgets/general/app_drawer/app_drawer.dart';
-import '../widgets/general/page_title.dart';
-import '../widgets/movie_page/movies_column.dart';
+import '../widgets/index.dart';
 
 class MoviesPage extends StatefulWidget {
   final PageEnum pageEnum;
@@ -36,7 +34,7 @@ class _MoviesPageState extends State<MoviesPage> {
   Widget build(BuildContext context) {
     final PageEnum pageEnum = widget.pageEnum;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const IconBar(),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

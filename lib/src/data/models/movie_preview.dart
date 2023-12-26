@@ -1,12 +1,13 @@
-import '../../domain/entities/genre_entity.dart';
-import '../../domain/entities/movie_entity.dart';
+import '../../domain/entities/index.dart';
 
 class MoviePreview {
   final MovieEntity movie;
   final List<GenreEntity> genres;
+  bool isFavorite;
 
-  MoviePreview(
-    this.movie,
-    this.genres,
-  );
+  MoviePreview({
+    required this.movie,
+    required this.genres,
+    required this.isFavorite,
+  });
 }

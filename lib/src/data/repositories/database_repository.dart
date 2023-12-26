@@ -1,8 +1,5 @@
-import '../../core/utils/enums/endpoint_enum.dart';
-import '../../core/utils/resources/data_state.dart';
-import '../../domain/entities/genre_entity.dart';
-import '../../domain/entities/movie_entity.dart';
-import '../../domain/repositories/i_database_repository.dart';
+import '../../core/utils/index.dart';
+import '../../domain/index.dart';
 import '../datasources/local/database.dart';
 
 class DatabaseRepository implements IDatabaseRepository {
@@ -17,14 +14,7 @@ class DatabaseRepository implements IDatabaseRepository {
     MovieEntity movie,
     EndpointEnum endpoint,
   ) async {
-    MovieEntity? existingMovie = await getMovieById(movie);
-    if (existingMovie != null &&
-        !existingMovie.category.contains(endpoint.name)) {
-      existingMovie.category.add(endpoint.name);
-      await database.movieDao.insertMovie(existingMovie);
-    } else {
-      await database.movieDao.insertMovie(movie);
-    }
+    await database.movieDao.insertMovie(movie);
   }
 
   @override
@@ -41,16 +31,8 @@ class DatabaseRepository implements IDatabaseRepository {
   }
 
   @override
-  Future<MovieEntity?> getMovieById(MovieEntity movie) {
-    return database.movieDao.findMovieById(movie.id!);
-  }
-
-  @override
   Future<void> saveGenre(GenreEntity genre) async {
-    GenreEntity? existingGenre = await getGenreById(genre);
-    if (existingGenre != null) {
-      await database.genreDao.insertGenre(genre);
-    }
+    await database.genreDao.insertGenre(genre);
   }
 
   @override
@@ -66,7 +48,26 @@ class DatabaseRepository implements IDatabaseRepository {
   }
 
   @override
-  Future<GenreEntity?> getGenreById(GenreEntity genre) {
-    return database.genreDao.findGenreById(genre.id!);
+  Future<void> updateFavorite(FavoriteEntity favorite) async {
+    FavoriteEntity? existingFavorite =
+        await database.favoriteDao.findFavoriteById(favorite.id!);
+    if (existingFavorite == null) {
+      await database.favoriteDao.insertFavorite(favorite);
+    } else {
+      await database.favoriteDao.deleteFavorite(favorite);
+    }
+  }
+
+  @override
+  Future<DataState<List<FavoriteEntity>>> getFavoriteMovies() async {
+    try {
+      List<FavoriteEntity> favoriteMovies =
+          await database.favoriteDao.findFavoriteMovies();
+      return DataSuccess(data: favoriteMovies);
+    } catch (e) {
+      return DataFailed(
+        error: Exception(e),
+      );
+    }
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../core/utils/enums/page_enum.dart';
-import '../widgets/general/app_drawer/app_drawer.dart';
-import '../widgets/home/page_preview.dart';
+import '../../core/utils/index.dart';
+import '../widgets/index.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -10,7 +9,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const IconBar(),
       body: SafeArea(
         child: ListView(
           children: [
