@@ -51,6 +51,7 @@ class _MovieDetailsState extends State<MovieDetails> {
   Widget build(BuildContext context) {
     final MoviePreview payload = widget.moviePreview;
     final MovieEntity movie = payload.movie;
+    final int movieId = movie.id!;
     return Theme(
       data: AppTheme(colorScheme: _imageColorScheme).darkTheme,
       child: Scaffold(
@@ -79,12 +80,12 @@ class _MovieDetailsState extends State<MovieDetails> {
                 isFavorite: payload.isFavorite,
                 onTap: () {
                   setState(() {
-                    _moviesBloc.updateFavorite(movie.id!);
+                    _moviesBloc.updateFavorite(movieId);
                     payload.isFavorite = !payload.isFavorite;
                   });
                   payload.isFavorite
-                      ? notificationManager.addedFavorite()
-                      : notificationManager.removedFavorite();
+                      ? notificationManager.addedFavorite(movieId)
+                      : notificationManager.removedFavorite(movieId);
                 },
               ),
             ],

@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/utils/constants/index.dart';
+
+
 class IconBar extends StatelessWidget implements PreferredSizeWidget{
   const IconBar({super.key});
 
-  static const double iconHeight = 40.0;
-  static const String assetRoute = 'assets/images/app_icon.png';
+  static const double iconPadding = AppPaddings.icon;
+
+  @override
+  Size get preferredSize => AppBar().preferredSize;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Center(
         child: SizedBox(
-          height: iconHeight,
+          height: iconPadding,
           child: Padding(
-            padding: const EdgeInsets.only(right: iconHeight),
+            padding: const EdgeInsets.only(right: iconPadding),
             child: Image.asset(
-              assetRoute,
+              AppResources.icon,
               fit: BoxFit.fitHeight,
             ),
           ),
@@ -23,7 +28,4 @@ class IconBar extends StatelessWidget implements PreferredSizeWidget{
       ),
     );
   }
-
-  @override
-  Size get preferredSize => AppBar().preferredSize;
 }

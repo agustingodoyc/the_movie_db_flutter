@@ -32,8 +32,9 @@ class DependencyHandler {
       repository: _repository,
       databaseRepository: _databaseRepository,
     );
-    _favoritesUseCase =
-        FavoritesUseCase(databaseRepository: _databaseRepository);
+    _favoritesUseCase = FavoritesUseCase(
+      databaseRepository: _databaseRepository,
+    );
     _moviesBloc = MoviesBloc(
       genresUseCase: _genresUseCase,
       moviesUseCase: _moviesUseCase,

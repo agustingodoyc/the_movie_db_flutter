@@ -1,43 +1,41 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../constants/index.dart';
+import '../enums/favorite_event.dart';
+
 class NotificationManager {
-  void addedFavorite() async {
-    String plainTitle = 'Favorite Added';
-    String plainBody = 'The movie was added to favorites';
+  void addedFavorite(int movieId) async {
     _showNotification(
-      plainTitle,
-      plainBody,
+      FavoriteEvent.add,
+      movieId,
     );
   }
 
-  void removedFavorite() async {
-    String plainTitle = 'Removed Favorite';
-    String plainBody = 'The movie is no longer in favorites';
+  void removedFavorite(int movieId) async {
     _showNotification(
-      plainTitle,
-      plainBody,
+      FavoriteEvent.remove,
+      movieId,
     );
   }
 
   void _showNotification(
-    String plainTitle,
-    String plainBody,
+    FavoriteEvent event,
+    int movieId,
   ) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'favorite_notifications_channel_id',
-      'Favorite Notifications',
-      channelDescription: 'Channel for favorites modification notifications',
+      NotificationTexts.channelId,
+      NotificationTexts.channelName,
+      channelDescription: NotificationTexts.channelDescription,
       importance: Importance.max,
       priority: Priority.high,
-      showWhen: false,
     );
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await FlutterLocalNotificationsPlugin().show(
-      0,
-      plainTitle,
-      plainBody,
+      movieId,
+      event.title,
+      event.body,
       platformChannelSpecifics,
     );
   }
