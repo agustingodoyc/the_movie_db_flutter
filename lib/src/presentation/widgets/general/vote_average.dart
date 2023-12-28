@@ -8,6 +8,8 @@ class VoteAverage extends StatelessWidget {
   static const double textSize = 15.0;
   static const double maxVoteValue = 10.0;
   static const int digits = 1;
+  static const double lowAverage = 1.0 / 3.0;
+  static const double mediumAverage = lowAverage * 2.0;
 
   const VoteAverage({
     super.key,
@@ -15,6 +17,16 @@ class VoteAverage extends StatelessWidget {
   });
 
   double get votePercent => voteAverage / maxVoteValue;
+
+  Color get progressColor {
+    if (votePercent <= lowAverage) {
+      return Colors.redAccent;
+    } else if (votePercent <= mediumAverage) {
+      return Colors.yellowAccent;
+    } else {
+      return Colors.greenAccent;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +45,7 @@ class VoteAverage extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: votePercent,
                   backgroundColor: Colors.indigo,
-                  color: Colors.greenAccent,
+                  color: progressColor,
                   strokeWidth: circleBorderWidth,
                 ),
               ),
