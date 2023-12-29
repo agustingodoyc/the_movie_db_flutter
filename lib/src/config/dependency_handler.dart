@@ -15,6 +15,7 @@ class DependencyHandler {
   late Repository _repository;
   late MoviesUseCase _moviesUseCase;
   late GenresUseCase _genresUseCase;
+  late FavoritesUseCase _favoritesUseCase;
   late MoviesBloc _moviesBloc;
 
   Future<void> initialize() async {
@@ -31,9 +32,13 @@ class DependencyHandler {
       repository: _repository,
       databaseRepository: _databaseRepository,
     );
+    _favoritesUseCase = FavoritesUseCase(
+      databaseRepository: _databaseRepository,
+    );
     _moviesBloc = MoviesBloc(
       genresUseCase: _genresUseCase,
       moviesUseCase: _moviesUseCase,
+      favoritesUseCase: _favoritesUseCase,
     );
     await _moviesBloc.initialize();
   }
@@ -49,6 +54,8 @@ class DependencyHandler {
   MoviesUseCase get moviesUseCase => _moviesUseCase;
 
   GenresUseCase get genresUseCase => _genresUseCase;
+
+  FavoritesUseCase get favoritesUseCase => _favoritesUseCase;
 
   MoviesBloc get moviesBloc => _moviesBloc;
 }

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/utils/constants/index.dart';
+import '../../../core/utils/index.dart';
 
+class LikeButton extends StatelessWidget {
+  final bool isFavorite;
+  final VoidCallback onTap;
 
-class LikeButton extends StatefulWidget {
-  const LikeButton({super.key});
+  const LikeButton({
+    super.key,
+    required this.isFavorite,
+    required this.onTap,
+  });
 
-  @override
-  State<LikeButton> createState() => _LikeButtonState();
-}
-
-class _LikeButtonState extends State<LikeButton> {
-  IconData icon = Icons.favorite_border;
   static const circleBorder = 20.0;
 
   @override
@@ -33,18 +33,10 @@ class _LikeButtonState extends State<LikeButton> {
               ),
             ),
             onPressed: () {
-              setState(
-                () {
-                  if (icon == Icons.favorite) {
-                    icon = Icons.favorite_border;
-                  } else {
-                    icon = Icons.favorite;
-                  }
-                },
-              );
+              onTap();
             },
             child: FittedBox(
-              child: Icon(icon),
+              child: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
             ),
           ),
         ),

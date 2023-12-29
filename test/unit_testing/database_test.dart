@@ -34,18 +34,6 @@ void main() {
           );
         },
       );
-
-      test(
-        'findMovieById Test',
-        () async {
-          await mockMovieDao.insertMovie(mockMovie);
-          final actual = await mockMovieDao.findMovieById(mockMovie.id!);
-          expect(
-            actual?.id,
-            equals(mockMovie.id),
-          );
-        },
-      );
     },
   );
 
@@ -59,18 +47,6 @@ void main() {
           final actual = await mockGenreDao.findGenres();
           expect(
             actual[0].id,
-            equals(mockGenre.id),
-          );
-        },
-      );
-
-      test(
-        'findGenreById Test',
-        () async {
-          await mockGenreDao.insertGenre(mockGenre);
-          final actual = await mockGenreDao.findGenreById(mockGenre.id!);
-          expect(
-            actual?.id,
             equals(mockGenre.id),
           );
         },

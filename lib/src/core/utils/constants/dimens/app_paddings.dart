@@ -4,4 +4,5 @@ abstract class AppPaddings {
   static const double image = 20.0;
   static const double textsShort = 10.0;
   static const double textsLarge = textsShort * 2;
+  static const double icon = image * 2;
 }

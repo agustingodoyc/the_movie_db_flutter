@@ -2,7 +2,7 @@ import 'package:floor/floor.dart';
 
 import '../../core/index.dart';
 
-@Entity(tableName: 'MovieEntity')
+@Entity(tableName: 'movies')
 @TypeConverters(
   [
     GenreIdList,

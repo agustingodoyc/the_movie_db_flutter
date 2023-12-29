@@ -1,5 +1,4 @@
-import '../../core/utils/enums/endpoint_enum.dart';
-import '../../core/utils/resources/data_state.dart';
+import '../../core/utils/index.dart';
 import '../entities/index.dart';
 
 abstract class IDatabaseRepository {
@@ -10,11 +9,11 @@ abstract class IDatabaseRepository {
 
   Future<DataState<List<MovieEntity>>> getSavedMovies(EndpointEnum endpoint);
 
-  Future<MovieEntity?> getMovieById(MovieEntity movie);
-
   Future<void> saveGenre(GenreEntity genre);
 
   Future<DataState<List<GenreEntity>>> getSavedGenres();
 
-  Future<GenreEntity?> getGenreById(GenreEntity genre);
+  Future<void> updateFavorite(FavoriteEntity favoriteEntity);
+
+  Future<DataState<List<FavoriteEntity>>> getFavoriteMovies();
 }

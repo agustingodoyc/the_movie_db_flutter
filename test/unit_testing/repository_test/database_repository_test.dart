@@ -13,9 +13,13 @@ class MockDatabase extends AppDatabase {
   @override
   GenreDao genreDao;
 
+  @override
+  FavoriteDao favoriteDao;
+
   MockDatabase(
     this.movieDao,
     this.genreDao,
+    this.favoriteDao,
   );
 }
 
@@ -23,22 +27,26 @@ class MockMovieDao extends Mock implements MovieDao {}
 
 class MockGenreDao extends Mock implements GenreDao {}
 
+class MockFavoriteDao extends Mock implements FavoriteDao {}
+
 void main() {
   late AppDatabase mockDatabase;
   late DatabaseRepository databaseRepository;
   late MovieDao mockMovieDao;
   late GenreDao mockGenresDao;
+  late FavoriteDao mockFavoriteDao;
 
   final MovieEntity mockMovie = MockEntity.movie;
-
   final GenreEntity mockGenre = MockEntity.genre;
 
   setUp(() {
     mockMovieDao = MockMovieDao();
     mockGenresDao = MockGenreDao();
+    mockFavoriteDao = MockFavoriteDao();
     mockDatabase = MockDatabase(
       mockMovieDao,
       mockGenresDao,
+      mockFavoriteDao,
     );
     databaseRepository = DatabaseRepository(mockDatabase);
     registerFallbackValue(mockMovie.category.first);
@@ -89,25 +97,6 @@ void main() {
               expect(
                 localMovies,
                 isA<DataState<List<MovieEntity>>>(),
-              );
-            },
-          );
-
-          test(
-            'getMovieById test',
-            () async {
-              when(
-                () => mockMovieDao.findMovieById(
-                  any(),
-                ),
-              ).thenAnswer(
-                (_) => Future.value(mockMovie),
-              );
-              MovieEntity? localMovies =
-                  await databaseRepository.getMovieById(mockMovie);
-              expect(
-                localMovies,
-                isA<MovieEntity>(),
               );
             },
           );
