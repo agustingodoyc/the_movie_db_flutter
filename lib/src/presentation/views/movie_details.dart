@@ -52,6 +52,7 @@ class _MovieDetailsState extends State<MovieDetails> {
     final MoviePreview payload = widget.moviePreview;
     final MovieEntity movie = payload.movie;
     final int movieId = movie.id!;
+    final String movieTitle = movie.title ?? MovieDefaults.title;
     return Theme(
       data: AppTheme(colorScheme: _imageColorScheme).darkTheme,
       child: Scaffold(
@@ -65,7 +66,7 @@ class _MovieDetailsState extends State<MovieDetails> {
               ),
               Center(
                 child: MovieTitle(
-                  title: movie.title ?? MovieDefaults.title,
+                  title: movieTitle,
                   releaseDate: movie.releaseDate ?? MovieDefaults.releaseDate,
                 ),
               ),
@@ -84,8 +85,14 @@ class _MovieDetailsState extends State<MovieDetails> {
                     payload.isFavorite = !payload.isFavorite;
                   });
                   payload.isFavorite
-                      ? notificationManager.addedFavorite(movieId)
-                      : notificationManager.removedFavorite(movieId);
+                      ? notificationManager.addedFavorite(
+                          movieId,
+                          movieTitle,
+                        )
+                      : notificationManager.removedFavorite(
+                          movieId,
+                          movieTitle,
+                        );
                 },
               ),
             ],

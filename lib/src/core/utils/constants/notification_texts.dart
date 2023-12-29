@@ -10,6 +10,6 @@ abstract class NotificationTexts {
   static const String removeTitle = 'Removed Favorite';
 
   // Notification Bodies
-  static const String addBody = 'The movie was added to favorites';
-  static const String removeBody = 'The movie is no longer in favorites';
+  static const String addBody = ' was added to favorites';
+  static const String removeBody = ' is no longer in favorites';
 }

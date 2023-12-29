@@ -4,23 +4,32 @@ import '../constants/index.dart';
 import '../enums/favorite_event.dart';
 
 class NotificationManager {
-  void addedFavorite(int movieId) async {
+  void addedFavorite(
+    int movieId,
+    String movieTitle,
+  ) async {
     _showNotification(
       FavoriteEvent.add,
       movieId,
+      movieTitle,
     );
   }
 
-  void removedFavorite(int movieId) async {
+  void removedFavorite(
+    int movieId,
+    String movieTitle,
+  ) async {
     _showNotification(
       FavoriteEvent.remove,
       movieId,
+      movieTitle,
     );
   }
 
   void _showNotification(
     FavoriteEvent event,
     int movieId,
+      String movieTitle,
   ) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -35,7 +44,7 @@ class NotificationManager {
     await FlutterLocalNotificationsPlugin().show(
       movieId,
       event.title,
-      event.body,
+      movieTitle + event.body,
       platformChannelSpecifics,
     );
   }
